@@ -1,0 +1,17 @@
+[gd_scene load_steps=5 format=3 uid="uid://diwxkvcswevkw"]
+
+[ext_resource type="Texture2D" uid="uid://xjn1tbu207el" path="res://icon.svg" id="1_3rokh"]
+[ext_resource type="Script" path="res://scenes/energybar/energy_bar.gd" id="1_7su0o"]
+[ext_resource type="Script" path="res://scenes/energybar/bar.gd" id="3_73eom"]
+[ext_resource type="Script" path="res://scenes/energybar/fill.gd" id="4_ifg83"]
+
+[node name="EnergyBar" type="Node2D"]
+script = ExtResource("1_7su0o")
+
+[node name="Bar" type="Sprite2D" parent="."]
+texture = ExtResource("1_3rokh")
+script = ExtResource("3_73eom")
+
+[node name="Fill" type="Sprite2D" parent="."]
+texture = ExtResource("1_3rokh")
+script = ExtResource("4_ifg83")

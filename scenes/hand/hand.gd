@@ -1,29 +1,6 @@
 extends Node2D
 
-func _ready():
-	position = Vector2(640, 575)
-
-var secs:float
-func _process(delta):
-	secs += delta
-	if secs >= 1 : 
-		secs -= 1
-		if cards.size() != 0 && randi_range(cards.size(), 6) == 6:
-			remCard(randi_range(0, cards.size()-1))
-		elif cards.size() < 7:
-			var n = randi_range(0, 5)
-			if (n == 0):
-				addCard(Card.strike())
-			elif (n == 1):
-				addCard(Card.defend())
-			elif (n == 2):
-				addCard(Card.poison())
-			if (n == 3):
-				addCard(Card.turtle())
-			elif (n == 4):
-				addCard(Card.spikes())
-			elif (n == 5):
-				addCard(Card.dagger())
+static var cardScene:PackedScene = preload("res://scenes/card/card.tscn")
 
 var cards:Array[Node] = [] # card instances
 
@@ -35,15 +12,39 @@ func addCard(c:Node):
 func remCard(n:int):
 	cards[n].queue_free()
 	cards.remove_at(n)
+	if selected >= cards.size() && selected != 0:
+		prevCard()
 	relocateCards()
 
-const xbuf:int = 150
-const ybuf:int = 10
-const angle:int = 5
 func relocateCards():
-	var len = cards.size()
+	var len:int = cards.size()
 	for i in range(len):
 		var card:Node = cards[i]
-		card.pos = Vector2(xbuf*i - xbuf*(len-1)/2, ybuf*abs((len-1)-(2*i)))
-		card.rot = angle*i - angle*(len-1)/2
+		var deg:int = (i - (len-1)/2) * 5 # last number is angle
+		card.pos = Vector2(sin(deg_to_rad(deg)), 1-cos(deg_to_rad(deg))) * 500
+		card.rot = deg
 
+func prevCard():
+	if selected == 0: selected = cards.size() - 1
+	else: selected -= 1
+
+func nextCard():
+	if selected == cards.size() - 1: selected = 0
+	else: selected += 1
+
+
+func _ready(): position = Vector2(960, 600)
+
+var selected:int = 0
+var sec:float = 0
+
+func _process(delta):
+	if Input.is_action_just_pressed("prev"): prevCard()
+	if Input.is_action_just_pressed("next"): nextCard()
+	print(selected)
+	
+	sec += delta
+	if sec >= 1.5: 
+		sec -= 1.5
+		if cards.size() < 7: 
+			addCard(Card.strike())
