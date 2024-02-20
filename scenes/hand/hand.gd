@@ -41,7 +41,6 @@ var sec:float = 0
 func _process(delta):
 	if Input.is_action_just_pressed("prev"): prevCard()
 	if Input.is_action_just_pressed("next"): nextCard()
-	print(selected)
 	
 	sec += delta
 	if sec >= 1.5: 
