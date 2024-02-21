@@ -1,16 +1,10 @@
-[gd_scene load_steps=4 format=3 uid="uid://dl1n0tgt6bawl"]
+[gd_scene load_steps=3 format=3 uid="uid://dl1n0tgt6bawl"]
 
 [ext_resource type="PackedScene" uid="uid://cv40g2pyrvxtf" path="res://scenes/player/player.tscn" id="1_0fg6m"]
-[ext_resource type="PackedScene" uid="uid://l5tmxbyt47ky" path="res://scenes/hand/hand.tscn" id="2_ealfn"]
-[ext_resource type="PackedScene" uid="uid://diwxkvcswevkw" path="res://scenes/energybar/energy_bar.tscn" id="3_8wmfd"]
+[ext_resource type="PackedScene" uid="uid://cd23ih1s16jjv" path="res://scenes/ui/ui.tscn" id="2_38kta"]
 
 [node name="Level" type="Node2D"]
 
 [node name="Player" parent="." instance=ExtResource("1_0fg6m")]
 
-[node name="Hand" parent="." instance=ExtResource("2_ealfn")]
-position = Vector2(960, 600)
-
-[node name="EnergyBar" parent="." instance=ExtResource("3_8wmfd")]
-position = Vector2(1200, 360)
-scale = Vector2(0.5, 4)
+[node name="UI" parent="." instance=ExtResource("2_38kta")]

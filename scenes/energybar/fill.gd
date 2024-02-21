@@ -3,7 +3,7 @@ extends Sprite2D
 func _ready():
 	scale = Vector2(1, 0)
 
-func _process(delta):
+func _process(_delta):
 	var amount:float = floorf(get_parent().amount) / 10 
 	pos = Vector2(0, 64 * (1-amount))
 	scl = Vector2(1, amount)
