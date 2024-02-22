@@ -1,10 +1,9 @@
 extends Node2D
-static var cardScene:PackedScene = preload("res://scenes/card/card.tscn")
 
-const PREV:int = -1
-const NEXT:int = 1
-const DISCARD_COST:int = 1
-const MAX_HAND:int = 4
+const PREV:int = -1			# switch(): previous card
+const NEXT:int = 1			# switch(): next card
+const DISCARD_COST:int = 1	# energy cost for a discard
+const MAX_HAND:int = 4		# hand size limit
 
 var deck:Array[Node] = []	# list of cards available
 var stack:Array[Node] = []	# list of cards in the draw pile
@@ -18,37 +17,41 @@ func reset():
 	stack = deck.duplicate(true)
 	hand = []
 
-func play(): 
+func play() -> Node: 
 	if hand.size() > current && $"../EnergyBar".spendEnergy(hand[current].nrg):
-		_discard(current)
-	# implement something actually playing the card ingame
+		return _discard(current)
+	return null
 
-func discard():
+func discard() -> Node:
 	if hand.size() > current && $"../EnergyBar".spendEnergy(DISCARD_COST):
-		_discard(current)
+		return _discard(current)
+	return null
 
-func _switch(direction:int):
+func switch(direction:int):
 	if direction == PREV:
 		if current == 0: current = hand.size() - 1
 		else: current -= 1
-	if direction == NEXT:
+	elif direction == NEXT:
 		if current == hand.size() - 1: current = 0
 		else: current += 1
 	_relocateCards()
 
 func _draw():
-	if hand.size() < MAX_HAND && stack.size() != 0:
-		var card:Node = stack.pop_at(randi_range(0, stack.size() - 1))
-		hand.append(card)
-		add_child(card)
-		_relocateCards()
+	if hand.size() >= MAX_HAND || stack.size() == 0: 
+		return 
+	var card:Node = stack.pop_at(randi_range(0, stack.size() - 1))
+	hand.append(card)
+	add_child(card)
+	_relocateCards()
 
-func _discard(n:int):
-	remove_child(hand[n])
+func _discard(n:int) -> Node:
+	var card:Node = hand[n]
+	remove_child(card)
 	stack.append(hand.pop_at(n))
 	if current >= hand.size() && current != 0:
-		_switch(PREV)
+		switch(PREV)
 	else: _relocateCards()
+	return card
 
 func _relocateCards():
 	for i in range(hand.size()):
@@ -59,18 +62,7 @@ func _relocateCards():
 		if i == current:
 			hand[i].pos += Vector2(0, -25).rotated(sin(rad))
 
-func _ready():
-	position = Vector2(960, 600)
-	
-	#debug
-	deck = [Card.strike(), Card.defend(), Card.poison(), 
-			Card.strike(), Card.defend(), Card.poison(), 
-			Card.thorns(), Card.spines(), Card.dagger()]
-	reset()
+func _ready(): position = Vector2(960, 600)
 
-func _process(delta):
+func _process(_delta): 
 	while (hand.size() < MAX_HAND && stack.size() != 0): _draw()
-	if Input.is_action_just_pressed("prev"): _switch(PREV)
-	if Input.is_action_just_pressed("next"): _switch(NEXT)
-	if Input.is_action_just_pressed("select"): play()
-	if Input.is_action_just_pressed("discard"): discard()

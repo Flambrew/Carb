@@ -1,0 +1,12 @@
+[gd_scene load_steps=4 format=3 uid="uid://cd23ih1s16jjv"]
+
+[ext_resource type="PackedScene" uid="uid://diwxkvcswevkw" path="res://scenes/combatui/energybar/energy_bar.tscn" id="1_62jy1"]
+[ext_resource type="Script" path="res://scenes/combatui/combatui.gd" id="1_hsqg8"]
+[ext_resource type="PackedScene" uid="uid://l5tmxbyt47ky" path="res://scenes/combatui/hand/hand.tscn" id="2_na3pj"]
+
+[node name="UI" type="Node2D"]
+script = ExtResource("1_hsqg8")
+
+[node name="EnergyBar" parent="." instance=ExtResource("1_62jy1")]
+
+[node name="Hand" parent="." instance=ExtResource("2_na3pj")]
